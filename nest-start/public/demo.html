@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <script src="https://unpkg.com/axios@0.24.0/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/qs@6.10.2/dist/qs.js"></script>
+  </head>
+  <body>
+    测试页面
+
+    <input type="file" id="fileInput" />
+  </body>
+  <script>
+    // url param
+    async function urlParamApi() {
+      const res = await axios.get('/api/person/1234');
+      console.log('urlParam==>', res);
+    }
+    // query
+    async function queryApi() {
+      const res = await axios.get('/api/person/find', {
+        params: {
+          name: '张三',
+          age: 18,
+        },
+      });
+      console.log('query==>', res);
+    }
+    // body
+    async function bodyApi() {
+      const res = await axios.post(
+        '/api/person',
+        Qs.stringify({
+          name: '李四',
+          age: 25,
+        }),
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      );
+      console.log('body==>', res);
+    }
+    // json
+    async function jsonApi() {
+      const res = await axios.post('/api/person', {
+        name: '王五',
+        age: 30,
+      });
+      console.log('json==>', res);
+    }
+    // form data
+    let fileInput = document.getElementById('fileInput');
+    fileInput.addEventListener('change', async (event) => {
+      const files = event.target.files;
+      const formData = new FormData();
+      formData.set('name', '赵六');
+      formData.set('age', '28');
+      formData.set('file', files[0]);
+      const res = await axios.post('/api/person/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('form data==>', res);
+    });
+    // 调用接口
+    queryApi();
+    urlParamApi();
+    bodyApi();
+    jsonApi();
+  </script>
+</html>
